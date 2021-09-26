@@ -29,6 +29,8 @@ public class RotatesALittle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.isPaused) return;
+
         if (Time.time >= timeStartNextTurn) {
             if (Time.time <= timeEndNextTurn) {
                 // Turn

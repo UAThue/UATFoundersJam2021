@@ -16,7 +16,8 @@ GameObject:
   - component: {fileID: 7642061675609764752}
   - component: {fileID: 3831681656192638464}
   - component: {fileID: -1929997635598766722}
-  m_Layer: 0
+  - component: {fileID: 3962501426184954934}
+  m_Layer: 7
   m_Name: leaf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,3 +158,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poof: {fileID: 100000, guid: 3156817f64ec68948ad6bb26569b9ef5, type: 3}
   sound: {fileID: 8300000, guid: 3c0697a7c08ebf040bdef5fa3845338b, type: 3}
+--- !u!114 &3962501426184954934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408253484125686654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa899a1251c25554fade3bbdf69aa1f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  percentBeforeDecay: 0.99
+  lifespan: 15

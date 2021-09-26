@@ -21,6 +21,9 @@ public class SinCurveWind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.isPaused) return;
+
+
         rb.AddForceAtPosition(force * UpWiggle(0.25f) * Mathf.Sin(Time.time - startTime), transform.position + (Random.insideUnitSphere * pokeRange) );          
 
 
