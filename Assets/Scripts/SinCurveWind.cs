@@ -9,6 +9,7 @@ public class SinCurveWind : MonoBehaviour
     public float force = 10;
     public float pokeRange = 1.0f;
     public float wiggleAmount = 0.3f;
+    public float upDraftPercent = 1.0f;
     private Rigidbody rb;
 
    
@@ -33,7 +34,7 @@ public class SinCurveWind : MonoBehaviour
 
     public Vector3 UpWiggle (float wiggleAmount)
     {
-        return new Vector3(Random.value * wiggleAmount, 1.0f, Random.value * wiggleAmount);
+        return new Vector3(Random.value * wiggleAmount, upDraftPercent, Random.value * wiggleAmount);
     }
        
 }

@@ -143,7 +143,13 @@ public class GameManager : MonoBehaviour
         timerImage.fillAmount = timeRemaining / gameTime;
         Debug.Log(""+ Mathf.FloorToInt((timeRemaining / gameTime) * TimerLeafColors.Count) + "/" + (TimerLeafColors.Count - 1));
         // timerImage.color = TimerLeafColors[Mathf.FloorToInt( (timeRemaining/gameTime) * TimerLeafColors.Count) ];
-        timerTextbox.text = ""+Mathf.Ceil(timeRemaining);
+        if (timeRemaining > 100) {
+            timerTextbox.text = "";
+        }
+        else
+        {
+            timerTextbox.text = "" + Mathf.Ceil(timeRemaining);
+        }
         scoreTextbox.text = "Points: "+score;
     }
 
@@ -188,7 +194,7 @@ public class GameManager : MonoBehaviour
 
             // Multiply for Combo
             if (comboCountdown > 0.0f) {
-                comboValue += 1;
+                comboValue *= 2;
                 comboValue = Mathf.Min(comboValue, maxCombo);
             } else {
                 comboValue = 1;

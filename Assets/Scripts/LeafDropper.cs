@@ -35,7 +35,8 @@ public class LeafDropper : MonoBehaviour
             if (GameManager.instance.numLeaves >= 1)
             {
                 GameManager.instance.numLeaves -= 1;
-                GameObject newLeaf = Instantiate(leafPrefab, targetDrop.position + dropOffset, Quaternion.identity) as GameObject;
+                GameObject newLeaf = Instantiate(leafPrefab, targetDrop.position + dropOffset, Quaternion.LookRotation(Vector3.up)) as GameObject;
+                newLeaf.transform.Rotate(0, 0, Random.Range(0.0f, 360.0f));
                 Material leafMat = newLeaf.GetComponent<Renderer>().material;
                 leafMat.color = leafColors[Random.Range(0, leafColors.Count)];
                 GameManager.instance.PlayRandomSoundFromList(GameManager.instance.leafDropSounds, targetDrop.position);

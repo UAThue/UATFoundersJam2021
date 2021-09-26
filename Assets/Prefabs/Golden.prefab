@@ -537,7 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenSlips: 2
-  stunbleChance: 0.1
+  stunbleChance: 0.75
   stumbleChanceReduction: 0.5
 --- !u!135 &1970903966697976254
 SphereCollider:
