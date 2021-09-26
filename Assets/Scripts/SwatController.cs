@@ -26,6 +26,7 @@ public class SwatController : MonoBehaviour
             anim.SetFloat("Random", Random.value);
             anim.SetLayerWeight(1, 1.0f);
             Destroy(other.gameObject);
+            GameManager.instance.PlayRandomSoundFromList(GameManager.instance.stumbleSounds, transform.position);
         }
     }
 }

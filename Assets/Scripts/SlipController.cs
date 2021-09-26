@@ -33,6 +33,9 @@ public class SlipController : MonoBehaviour
                 }
                 nextAllowedSlipTime = Time.time + timeBetweenSlips;
 
+            } 
+            else {
+                //Debug.Log("NO SLIP BECAUSE OF TIMER");
             }
             Destroy(other.gameObject);
         }
@@ -44,11 +47,19 @@ public class SlipController : MonoBehaviour
         stunbleChance *= (1 - stumbleChanceReduction);
 
         anim.SetTrigger("Stumble");
+
+        GameManager.instance.PlayRandomSoundFromList(GameManager.instance.stumbleSounds, transform.position);
     }
 
     public void Fall()
     {
         anim.SetTrigger("Fall");
+        GameManager.instance.PlayRandomSoundFromList(GameManager.instance.fallSounds, transform.position);
+
+        Runner runner = GetComponentInParent<Runner>();
+        if (runner != null) {
+            GameManager.instance.AddScore(runner);
+        }
     }
 
 }

@@ -10,7 +10,7 @@ public class LeafDropper : MonoBehaviour
     public Vector3 targetPositionOffset;
     public LayerMask groundLayer;
     public float leafLifespawn = 5.0f;
-
+    public List<Color> leafColors;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +36,9 @@ public class LeafDropper : MonoBehaviour
             {
                 GameManager.instance.numLeaves -= 1;
                 GameObject newLeaf = Instantiate(leafPrefab, targetDrop.position + dropOffset, Quaternion.identity) as GameObject;
+                Material leafMat = newLeaf.GetComponent<Renderer>().material;
+                leafMat.color = leafColors[Random.Range(0, leafColors.Count)];
+                GameManager.instance.PlayRandomSoundFromList(GameManager.instance.leafDropSounds, targetDrop.position);
             }
         }
     }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +10,12 @@ public class GameManager : MonoBehaviour
 
     [Header("PlayerData")]
     public float score = 0;
-    public float timeRemaining = 120;
+    public float gameTime = 90;
+    public float comboValue = 0;
+    public float maxTimeBetweenCombos = 0.5f;
+    public float comboCountdown = 0.0f;
+    public float maxCombo = 8;
+    private float timeRemaining;
 
     [Header("Leaves")]
     public float numLeaves = 0;
@@ -29,7 +36,23 @@ public class GameManager : MonoBehaviour
 
     [Header("UI Objects")]
     public GameObject MainMenu;
+    public GameObject PauseMenu;
     public GameObject GameUI;
+    public GameObject GameOverUI;
+    public Image leafCounter;
+    public Text scoreTextbox;
+    public Text timerTextbox;
+    public Image timerImage;
+    public GameObject floatingScorePrefab;
+    public List<Color> TimerLeafColors;
+    public Text FinalScoreBox;
+
+    [Header("Sounds")]
+    public List<AudioClip> leafDropSounds;
+    public List<AudioClip> leafPopSounds;
+    public List<AudioClip> stumbleSounds;
+    public List<AudioClip> fallSounds;
+    public AudioSource musicPlayer;
 
     void Awake()
     {
@@ -41,23 +64,41 @@ public class GameManager : MonoBehaviour
     {
 
         TogglePause();
+        GameOverUI.SetActive(false);
+        GameUI.SetActive(false);
+        MainMenu.SetActive(true);
+        PauseMenu.SetActive(false);
 
         // Set runner spawn time to now
         nextRunnerSpawnTime = Time.time;
 
+        // start with game time
+        timeRemaining = gameTime;
 
+        // Start Music
+        musicPlayer.Play();
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //If we are in the game mode
         if (!isPaused)
         {
+            // Get leaves
             IncreaseLeavesOverTime();
 
-            //TODO: Spawn runners
+            // reduce timers
+            timeRemaining -= Time.deltaTime;
+            comboCountdown -= Time.deltaTime;
+            comboCountdown = Mathf.Max(0.0f, comboCountdown);           
+
+            // Check for end game
+            if (timeRemaining <= 0) {
+                GameOver();
+            }
+
+            //Spawn runners
             SpawnRunners();
         }
 
@@ -66,21 +107,118 @@ public class GameManager : MonoBehaviour
             TogglePause();
         }
 
+        //Update UI
+        UpdateUI();
+
+
+    }
+
+    public void PlayRandomSoundFromList(List<AudioClip> soundList, Vector3 position, float volume = 1.0f)
+    {
+        
+        if (position == null) {
+            position = Camera.main.transform.position;
+        }
+        if (soundList != null && soundList.Count > 0) {
+            AudioSource.PlayClipAtPoint(soundList[Random.Range(0, soundList.Count)], position, volume);
+        }
+    }
+
+    public void GameOver()
+    {
+        TogglePause();
+        MainMenu.SetActive(false);
+        GameUI.SetActive(false);
+        PauseMenu.SetActive(false);
+        GameOverUI.SetActive(true);
+        FinalScoreBox.text = "Final Score:\n" + score;
+        musicPlayer.Stop();
+        musicPlayer.Play();
+    }
+
+    public void  UpdateUI()
+    {
+
+        leafCounter.fillAmount = numLeaves / maxLeaves;
+        timerImage.fillAmount = timeRemaining / gameTime;
+        Debug.Log(""+ Mathf.FloorToInt((timeRemaining / gameTime) * TimerLeafColors.Count) + "/" + (TimerLeafColors.Count - 1));
+        // timerImage.color = TimerLeafColors[Mathf.FloorToInt( (timeRemaining/gameTime) * TimerLeafColors.Count) ];
+        timerTextbox.text = ""+Mathf.Ceil(timeRemaining);
+        scoreTextbox.text = "Points: "+score;
     }
 
     public void TogglePause()
     {
         isPaused = !isPaused;
-        if (isPaused) { Time.timeScale = 0.0f; }
-        else { Time.timeScale = 1.0f; }
+        if (isPaused) {
+            Time.timeScale = 0.0f;
+            musicPlayer.Pause();
+        }
+        else {
+            Time.timeScale = 1.0f;
+            musicPlayer.UnPause();
+        }
 
         // Toggle on the pause menu
-        MainMenu.SetActive(isPaused);
+        PauseMenu.SetActive(isPaused);
         GameUI.SetActive(!isPaused);
     }
 
-    public void ShowMenu ()
+    public void StartGame ()
     {
+        score = 0;
+        musicPlayer.Play();
+        isPaused = false;
+        MainMenu.SetActive(false);
+        GameUI.SetActive(true);
+        GameOverUI.SetActive(false);
+        PauseMenu.SetActive(false);
+        Time.timeScale = 1.0f;
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);        
+    }
+
+    public void AddScore(Runner runner)
+    {
+        if (runner != null) {
+            float scoreToAdd = runner.scoreValue;
+
+            // Multiply for Combo
+            if (comboCountdown > 0.0f) {
+                comboValue += 1;
+                comboValue = Mathf.Min(comboValue, maxCombo);
+            } else {
+                comboValue = 1;
+            }
+            scoreToAdd *= comboValue;
+
+            // Add to score
+            score += scoreToAdd;
+
+            // Update text
+            GameObject floatingScore = Instantiate(floatingScorePrefab, runner.transform.position + Vector3.up, Quaternion.identity) as GameObject;
+
+            Text textBox = floatingScore.GetComponentInChildren<Text>();
+
+            if (runner.scoreValue >= 0) { textBox.text = "+"; }
+            else {
+                textBox.text = "";
+            }
+            textBox.text += scoreToAdd;
+
+            if (comboValue > 1) {
+                textBox.text += "\nCOMBO x" + comboValue;                   
+                textBox.color = Color.yellow;
+            }
+
+            // Set timer for next combo
+            comboCountdown = maxTimeBetweenCombos;
+        }
+
+
 
     }
 

@@ -5,15 +5,15 @@ using UnityEngine;
 public class PoofOnDestroy : MonoBehaviour
 {
     public GameObject poof;
-    public AudioClip sound;
+    public List<AudioClip> sounds;
 
     public void OnDestroy()
     {
         if (poof != null) {
             Instantiate(poof, transform.position, transform.rotation);
         }
-        if (sound!= null) {
-            AudioSource.PlayClipAtPoint(sound, transform.position);
+        if (sounds!= null) {
+            GameManager.instance.PlayRandomSoundFromList(sounds, transform.position);
         }
     }
 }

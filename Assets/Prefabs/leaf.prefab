@@ -129,9 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55ac53d0b7385841a0224ad160c5887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTime: 0
-  force: 1
-  pokeRange: 1
+  force: 0.2
+  pokeRange: 1.2
+  wiggleAmount: 0.3
 --- !u!114 &3831681656192638464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +157,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poof: {fileID: 100000, guid: 3156817f64ec68948ad6bb26569b9ef5, type: 3}
-  sound: {fileID: 8300000, guid: 3c0697a7c08ebf040bdef5fa3845338b, type: 3}
+  sounds:
+  - {fileID: 8300000, guid: e66e9546f37ba7d468bb771319e79c8e, type: 3}
+  - {fileID: 8300000, guid: 0c2b98316dbee5343abaef26b629dc3b, type: 3}
+  - {fileID: 8300000, guid: e21b67ecfac4f1e4498cb927e698e0d8, type: 3}
+  - {fileID: 8300000, guid: 4dfacd8c1a515a04a8ef84e1eecdaa8f, type: 3}
+  - {fileID: 8300000, guid: 647e402e057b03b448450e60ff4241ab, type: 3}
 --- !u!114 &3962501426184954934
 MonoBehaviour:
   m_ObjectHideFlags: 0
